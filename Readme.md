@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Лиза Позднякова](https://up.htmlacademy.ru/javascript/18/user/5608).
-* Наставник: `Неизвестно`.
+* Наставник: [Нет].
 
 ---
 
