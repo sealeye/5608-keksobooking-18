@@ -10,7 +10,7 @@ function createCards() {
 
   function randomInteger(min, max) {
     // случайное число от min до (max+1)
-    let randoms = min + Math.random() * (max + 1 - min);
+    var randoms = min + Math.random() * (max + 1 - min);
     return Math.floor(randoms);
   }
 
@@ -80,7 +80,7 @@ createCards();
 //временное решение
 map.classList.remove('map--faded');
 
-function renderCard(ad) {
+function createPin(ad) {
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var pin = pinTemplate.cloneNode(true);
 
@@ -94,14 +94,14 @@ function renderCard(ad) {
   return pin;
 }
 
-function renderCards() {
+function renderPins() {
   var pinsList = document.querySelector('.map__pins');
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < advertsCount; i++) {
-    fragment.appendChild(renderCard(adverts[i]));
+    fragment.appendChild(createPin(adverts[i]));
   }
 
   pinsList.appendChild(fragment);
 }
-renderCards();
+renderPins();
