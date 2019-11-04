@@ -1,9 +1,12 @@
 var adverts = [];
 var advertsCount = 8;
+var pinWidth = 50;
+var pinHeight = 70;
 
 var map = document.querySelector('.map')
 
-var createAds = function () {
+// создание массива с объектами
+function createCards() {
 
   function randomInteger(min, max) {
     // случайное число от min до (max+1)
@@ -20,8 +23,9 @@ var createAds = function () {
     var features = ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"];
     var times = ['12: 00', '13: 00', '14: 00'];
 
+    // создание массива с рандомной длинной и рандомными элементами из другого массива
     function createRandomArray(array) {
-      var randomArray = []; //финальный массив  offerFeatures
+      var randomArray = []; //финальный массив
       var arrayIndex = 0; // индекс элемента, который нужно поместить в новый массив
       var randomArrayLength = randomInteger(1, array.length); // длинна финального массива
 
@@ -36,8 +40,9 @@ var createAds = function () {
       return randomArray;
     };
 
+    // создание координат метки
     function createCoordinats() {
-      horizontalCoord = randomInteger(0, map.offsetWidth);
+      horizontalCoord = randomInteger(pinWidth, map.offsetWidth);
       verticalCoord = randomInteger(130, 630);
     }
     createCoordinats();
@@ -45,10 +50,6 @@ var createAds = function () {
     var ad = {
       "author": {
         "avatar": 'img/avatars/user0' + (i + 1) + '.png'
-      },
-      "location": {
-        "x": horizontalCoord,
-        "y": verticalCoord
       },
       "offer": {
         "title": 'Заголовок', //строка, заголовок предложения
@@ -59,19 +60,48 @@ var createAds = function () {
         "guests": randomInteger(1, 20), //число, количество гостей, которое можно разместить
         "checkin": times[randomInteger(0, times.length - 1)], //строка с одним из трёх фиксированных значений: 12: 00, 13: 00 или 14: 00,
         "checkout": times[randomInteger(0, times.length - 1)], //строка с одним из трёх фиксированных значений: 12: 00, 13: 00 или 14: 00
-
         "features": createRandomArray(features),
         "description": 'Описание', //строка с описанием,
         "photos": createRandomArray(photos)
+      },
+      "location": {
+        "x": horizontalCoord,
+        "y": verticalCoord
       }
     };
-    console.log(ad);
+    //console.log(ad);
     adverts.push(ad);
   }
-  console.log(adverts);
+  //console.log(adverts);
   return adverts;
 };
-createAds();
+createCards();
 
 //временное решение
 map.classList.remove('map--faded');
+
+function renderCard(ad) {
+  var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+  var pin = pinTemplate.cloneNode(true);
+
+  pin.style.left = ad.location['x'] - pinWidth + 'px';
+  pin.style.top = ad.location['y'] - pinHeight + 'px';
+
+  pin.querySelector('img').src = ad.author['avatar'];
+  pin.querySelector('img').alt = ad.offer['title'];
+
+  console.log(ad.location['x'] + ', ' + ad.location['y']);
+  return pin;
+}
+
+function renderCards() {
+  var pinsList = document.querySelector('.map__pins');
+  var fragment = document.createDocumentFragment();
+
+  for (var i = 0; i < advertsCount; i++) {
+    fragment.appendChild(renderCard(adverts[i]));
+  }
+
+  pinsList.appendChild(fragment);
+}
+renderCards();
