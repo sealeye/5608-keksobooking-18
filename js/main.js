@@ -2,8 +2,8 @@
 
 var adverts = []; // массив для объектов объявлений
 var advertsCount = 8; // количество объявлений
-var pinWidth = 50;
-var pinHeight = 70;
+var PIN_WIDTH = 50;
+var PIN_HEIGHT = 70;
 var horizontalCoord = 0;
 var verticalCoord = 0;
 var map = document.querySelector('.map');
@@ -62,7 +62,7 @@ function createCards() {
 
   // создание координат метки c учетом размера пина
   function createCoordinats() {
-    horizontalCoord = randomInteger(pinWidth, map.offsetWidth);
+    horizontalCoord = randomInteger(PIN_WIDTH, map.offsetWidth);
     verticalCoord = randomInteger(130, 630);
   }
 
@@ -106,8 +106,8 @@ function createPin(ad) {
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var pin = pinTemplate.cloneNode(true);
 
-  pin.style.left = ad.location['x'] - pinWidth + 'px';
-  pin.style.top = ad.location['y'] - pinHeight + 'px';
+  pin.style.left = ad.location['x'] - (PIN_WIDTH / 2) + 'px';
+  pin.style.top = ad.location['y'] - PIN_HEIGHT + 'px';
 
   pin.querySelector('img').src = ad.author['avatar'];
   pin.querySelector('img').alt = ad.offer['title'];
@@ -201,13 +201,16 @@ renderAdvertiseCard();
 var adForm = document.querySelector('.ad-form');
 var formElements = adForm.querySelectorAll('fieldset');
 var mapFilters = document.querySelector('.map__filters');
+var addressInput = adForm.querySelector('input[name="address"]');
+var mainPin = document.querySelector('.map__pin--main');
+var ENTER_KEYCODE = 13;
 
 function deactivatePage() {
   map.classList.add('map--faded');
   adForm.classList.add('ad-form--disabled');
   mapFilters.classList.add('map__filters--disabled');
   for (var i = 0; i < formElements.length; i++) {
-     console.log(formElements.length);
+    //console.log(formElements.length);
     formElements[i].setAttribute('disabled', 'disabled');
   }
 };
@@ -223,11 +226,19 @@ function activatePage() {
   }
 };
 
-var mainPin = document.querySelector('.map__pin--main');
-var ENTER_KEYCODE = 13;
+var MAIN_PIN_SIZE = 65;
+
+function adressCoords() {
+  var posY = Math.round(mainPin.offsetTop + MAIN_PIN_SIZE); // верхний отступ эл-та от родителя
+  var posX = Math.round(mainPin.offsetLeft + MAIN_PIN_SIZE / 2); // левый отступ эл-та от родителя
+  addressInput.value = posX + ', ' + posY;
+};
 
 // активация страницы
-mainPin.addEventListener('mousedown', activatePage);
+mainPin.addEventListener('mousedown', function () {
+  activatePage();
+  adressCoords();
+});
 
 mainPin.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
