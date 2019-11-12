@@ -245,3 +245,42 @@ mainPin.addEventListener('keydown', function (evt) {
     activatePage();
   }
 });
+
+var guestsCapacity = adForm.querySelectorAll('#capacity option');
+var roomsCapacity = adForm.querySelectorAll('#room_number option');
+var roomsSelect = adForm.querySelector('#room_number');
+
+// проверка соответствия выбранных комнат доступному количеству гостей
+function validateGuests(rooms) {
+  for (var i = 0; i < guestsCapacity.length; i++) {
+    guestsCapacity[i].setAttribute('disabled', 'disabled');
+    guestsCapacity[i].removeAttribute('selected');
+    if (rooms >= guestsCapacity[i].value && guestsCapacity[i].value != 0) {
+      guestsCapacity[i].removeAttribute('disabled');
+      //console.log(guestsCapacity[i]);
+      guestsCapacity[i].setAttribute('selected', 'selected');
+    }
+    if (rooms == 100 && guestsCapacity[i].value == 0) {
+      //console.log( guestsCapacity[i]);
+      guestsCapacity[i].removeAttribute('disabled');
+      guestsCapacity[i].setAttribute('selected', 'selected');
+
+    }
+    if (rooms == 100 && guestsCapacity[i].value == 1) {
+      guestsCapacity[i].setAttribute('disabled', 'disabled');
+    }
+  }
+};
+
+// валидация комнат в зависимости от изначального значения
+function selectedRooms() {
+  var selectedRoom = adForm.querySelector('#room_number option[selected]').value;
+  validateGuests(selectedRoom);
+};
+selectedRooms();
+
+// валидация при выборе селекта комнат
+roomsSelect.addEventListener('change', function (evt) {
+  var rooms = this.options[this.selectedIndex].value;
+  validateGuests(rooms);
+});
