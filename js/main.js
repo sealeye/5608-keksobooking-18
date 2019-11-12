@@ -83,12 +83,12 @@ var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditio
 var times = ['12: 00', '13: 00', '14: 00'];
 
 // найти в массиве свойство объекта без его значения
-function typeProperty() {
-  var typeIndex = randomInteger(0, types.length - 1);
-  var obj = types[typeIndex];
+function typeProperty(obj) {
+  var typeIndex = randomInteger(0, obj.length - 1);
+  var objIndex = obj[typeIndex];
 
-  return Object.keys(obj)[0];
-};
+  return Object.keys(objIndex)[0];
+}
 
 function randomInteger(min, max) {
   // случайное число от min до (max+1)
@@ -116,7 +116,7 @@ function createCards() {
     return randomArray;
   }
 
-  // создание координат метки
+  // создание координат метки c учетом размера пина
   function createCoordinats() {
     horizontalCoord = randomInteger(pinWidth, map.offsetWidth);
     verticalCoord = randomInteger(130, 630);
@@ -125,7 +125,7 @@ function createCards() {
   for (var i = 0; i < advertsCount; i++) {
     createCoordinats();
 
-    var type = typeProperty();
+    var type = typeProperty(types);
 
     var ad = {
       'author': {
@@ -213,7 +213,7 @@ function createCard(ad) {
     }
   }
 
-  card.querySelector('.popup__type').textContent = typeText; //todo настроить
+  card.querySelector('.popup__type').textContent = typeText;
   card.querySelector('.popup__text--capacity').textContent = ad.offer.rooms + ' ' + declOfNum(ad.offer.rooms, ['комната', 'комнаты', 'комнат']) + ' для ' + ad.offer.guests + ' ' + declOfNum(ad.offer.guests, ['гостя', 'гостей', 'гостей']);
   card.querySelector('.popup__text--time').textContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
 
@@ -247,15 +247,13 @@ function createCard(ad) {
   return card;
 }
 
-function renderCard() {
+function renderAdvertiseCard() {
   var pinsList = document.querySelector('.map__pins');
   var fragment = document.createDocumentFragment();
 
   fragment.appendChild(createCard(adverts[0]));
-
   pinsList.after(fragment);
 }
-renderCard();
 
-
-console.log(adverts[0]);
+renderAdvertiseCard();
+//console.log(adverts[0]);
