@@ -1,61 +1,5 @@
 'use strict';
 
-//Напишите функцию для создания массива из 8 сгенерированных JS объектов. Каждый объект массива ‐ описание похожего объявления неподалёку. Структура объектов должна быть следующей:
-//{
-//  "author": {
-//    "avatar": строка, адрес изображения вида img/avatars/user{{xx}}.png, где {{xx}} это число от 1 до 8 с ведущим нулём. Например, 01, 02 и т. д. Адреса изображений не повторяются
-//  },
-//
-//  "offer": {
-//    "title": строка, заголовок предложения
-//    "address": строка, адрес предложения. Для простоты пусть пока представляет собой запись вида "{{location.x}}, {{location.y}}", например, "600, 350"
-//    "price": число, стоимость
-//    "type": строка с одним из четырёх фиксированных значений: palace, flat, house или bungalo
-//    "rooms": число, количество комнат
-//    "guests": число, количество гостей, которое можно разместить
-//    "checkin": строка с одним из трёх фиксированных значений: 12:00, 13:00 или 14:00,
-//    "checkout": строка с одним из трёх фиксированных значений: 12:00, 13:00 или 14:00
-//    "features": массив строк случайной длины из ниже предложенных: "wifi", "dishwasher", "parking", "washer", "elevator", "conditioner",
-//    "description": строка с описанием,
-//    "photos": массив строк случайной длины, содержащий адреса фотографий "http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"
-//  },
-//
-//  "location": {
-//    "x": случайное число, координата x метки на карте. Значение ограничено размерами блока, в котором перетаскивается метка.
-//    "y": случайное число, координата y метки на карте от 130 до 630.
-//  }
-//}
-
-//У блока .map уберите класс .map--faded.
-//Это временное решение, этот класс переключает карту из неактивного состояния в активное. В последующих заданиях, в соответствии с ТЗ вы будете переключать режимы страницы: неактивный, в котором карта и форма заблокированы и активный режим, в котором производится ввод данных и просмотр похожих объявлений. Сейчас для тестирования функции генерации похожих объявлений мы временно сымитируем активный режим, а в последующих разделах запрограммируем его полностью.
-
-//На основе данных, созданных в первом пункте, создайте DOM-элементы, соответствующие меткам на карте, и заполните их данными из массива. Итоговую разметку метки .map__pin можно взять из шаблона #pin.
-//У метки должны быть следующие данные:
-//Координаты:style="left: {{location.x}}px; top: {{location.y}}px;"
-//src="{{author.avatar}}"
-//alt="{{заголовок объявления}}"
-//Обратите внимание. Координаты X и Y, которые вы вставите в разметку, это не координаты левого верхнего угла блока метки, а координаты, на которые указывает метка своим острым концом. Чтобы найти эту координату нужно учесть размеры элемента с меткой.
-
-//Отрисуйте сгенерированные DOM-элементы в блок .map__pins. Для вставки элементов используйте DocumentFragment.
-//Требования к коду
-//Код должен быть разделён на отдельные функции. Стоит отдельно объявить функцию генерации случайных данных, функцию создания DOM-элемента на основе JS-объекта, функцию заполнения блока DOM-элементами на основе массива JS-объектов. Пункты задания примерно соответствуют функциям, которые вы должны создать.
-
-//Отрисуйте сгенерированные DOM-элементы в блок .map__pins. Для вставки элементов используйте DocumentFragment.
-
-//На основе первого по порядку элемента из сгенерированного массива и шаблона #card создайте DOM-элемент объявления, заполните его данными из объекта:
-//Выведите заголовок объявления offer.title в заголовок .popup__title.
-//Выведите адрес offer.address в блок .popup__text--address.
-//Выведите цену offer.price в блок .popup__text--price строкой вида {{offer.price}}₽/ночь. Например, 5200₽/ночь.
-//В блок .popup__type выведите тип жилья offer.type: Квартира для flat, Бунгало для bungalo, Дом для house, Дворец для palace.
-//Выведите количество гостей и комнат offer.rooms и offer.guests в блок .popup__text--capacity строкой вида {{offer.rooms}} комнаты для {{offer.guests}} гостей. Например, 2 комнаты для 3 гостей.
-//Время заезда и выезда offer.checkin и offer.checkout в блок .popup__text--time строкой вида Заезд после {{offer.checkin}}, выезд до {{offer.checkout}}. Например, заезд после 14:00, выезд до 12:00.
-//В список .popup__features выведите все доступные удобства в объявлении.
-//В блок .popup__description выведите описание объекта недвижимости offer.description.
-//В блок .popup__photos выведите все фотографии из списка offer.photos. Каждая из строк массива photos должна записываться как src соответствующего изображения.
-//Замените src у аватарки пользователя — изображения, которое записано в .popup__avatar — на значения поля author.avatar отрисовываемого объекта.
-
-//Вставьте полученный DOM-элемент в блок .map перед блоком.map__filters-container.
-
 var adverts = []; // массив для объектов объявлений
 var advertsCount = 8; // количество объявлений
 var pinWidth = 50;
@@ -157,9 +101,6 @@ function createCards() {
 }
 createCards();
 
-// временное решение
-map.classList.remove('map--faded');
-
 // создание пина
 function createPin(ad) {
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
@@ -235,7 +176,7 @@ function createCard(ad) {
 
   for (var i = 0; i < ad.offer.photos.length; i++) {
     var photo = card.querySelector('.popup__photos img').cloneNode(true);
-    console.log(ad.offer.photos);
+    //console.log(ad.offer.photos);
     photo.src = ad.offer.photos[i];
     card.querySelector('.popup__photos').appendChild(photo);
   }
@@ -243,7 +184,7 @@ function createCard(ad) {
   card.querySelector('.popup__photos img:first-child').remove(); // удаляет пример фото из темплейта
   card.querySelector('.popup__avatar').src = ad.author.avatar;
 
-  console.log(card);
+  //console.log(card);
   return card;
 }
 
@@ -256,4 +197,40 @@ function renderAdvertiseCard() {
 }
 
 renderAdvertiseCard();
-//console.log(adverts[0]);
+
+var adForm = document.querySelector('.ad-form');
+var formElements = adForm.querySelectorAll('fieldset');
+var mapFilters = document.querySelector('.map__filters');
+
+function deactivatePage() {
+  map.classList.add('map--faded');
+  adForm.classList.add('ad-form--disabled');
+  mapFilters.classList.add('map__filters--disabled');
+  for (var i = 0; i < formElements.length; i++) {
+     console.log(formElements.length);
+    formElements[i].setAttribute('disabled', 'disabled');
+  }
+};
+
+deactivatePage();
+
+function activatePage() {
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  mapFilters.classList.remove('map__filters--disabled');
+  for (var i = 0; i < formElements.length; i++) {
+    formElements[i].removeAttribute('disabled');
+  }
+};
+
+var mainPin = document.querySelector('.map__pin--main');
+var ENTER_KEYCODE = 13;
+
+// активация страницы
+mainPin.addEventListener('mousedown', activatePage);
+
+mainPin.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    activatePage();
+  }
+});
